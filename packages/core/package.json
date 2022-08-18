@@ -1,0 +1,19 @@
+{
+  "name": "@czh-cli-dev/core",
+  "version": "1.0.0",
+  "description": "czh-cli-dev core",
+  "author": "chenzehua <136565629@qq.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "node ./__tests__/core.test.js"
+  }
+}
