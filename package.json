@@ -14,5 +14,9 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "colors": "^1.4.0",
+    "user-home": "^3.0.0"
+  }
 }

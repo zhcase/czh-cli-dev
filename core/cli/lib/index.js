@@ -1,16 +1,21 @@
 "use strict";
-
 const semver = require("semver");
+const userHome=require('user-home');
+const pathExists = require("path-exists").sync;
 const colors = require("colors/safe");
 const pkg = require("../package.json");
 const log = require("@czh-cli-dev/log");
 const constant = require("./const");
 
+
+console.log(pathExists);
+
 function core() {
   try {
     checkPkgVersion();
     checkNodeVersion();
-    checkRoot();
+    // checkRoot(); //后面恢复他只在mac上有用目前
+    checkUserHome();
   } catch (e) {
     log.error(e.message);
   }
@@ -22,9 +27,17 @@ function checkRoot(){
     const rootCheck=require("root-check");
     // 切换到root账户
     rootCheck();
+    //切换到用户主目录
+    checkUserHome();
 }
 
 
+function checkUserHome(){
+  console.log(userHome);
+  if(!userHome||!pathExists(userHome)){
+    throw new Error(colors.red("当前登录用户主目录不存在!"))
+  }
+}
 
 // 检查node版本
 function checkNodeVersion() {
