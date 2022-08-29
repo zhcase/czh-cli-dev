@@ -10,7 +10,7 @@ const constant = require("./const");
 
 let args,config;
 
-function core() {
+async function core() {
   try {
     checkPkgVersion();
     checkNodeVersion();
@@ -18,6 +18,7 @@ function core() {
     checkUserHome();
     checkInputArgs();
     checkEnv();
+    await checkGlobalUpdate();
   } catch (e) {
     log.error(e.message);
   }
@@ -25,9 +26,16 @@ function core() {
 
 
 // 检查是否需要全局更新
-function checkGlobalUpdate(){
+async function checkGlobalUpdate(){
   // 1.获取当前版本号合模块名
+  const cuurentVersion=pkg.version;
+  const npmName=pkg.name;
   // 2.调用Npm Api 获取所有模块
+  const {getNpmInfo}=require("@czh-cli-dev/get-npm-info");
+ let data=await getNpmInfo(npmName);
+ console.log(data.versions);
+  // 3.提取所有版本号，比对哪些版本号是大于当前版本号的
+  // 4. 获取最新版本号，提示用户更新到该版本
 
 }
 
