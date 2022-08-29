@@ -27,6 +27,7 @@ function core() {
 // 检查是否需要全局更新
 function checkGlobalUpdate(){
   // 1.获取当前版本号合模块名
+  // 2.调用Npm Api 获取所有模块
 
 }
 
