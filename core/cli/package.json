@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@czh-cli-dev/get-npm-info": "file:../../utils/get-npm-info",
+    "@czh-cli-dev/exec": "file:../exec",
     "@czh-cli-dev/log": "file:../../utils/log",
     "@czh-cli-dev/init": "file:../../commands/init",
     "colors": "^1.4.0",

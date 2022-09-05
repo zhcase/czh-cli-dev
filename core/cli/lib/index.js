@@ -8,7 +8,7 @@ const colors = require('colors/safe')
 const pkg = require('../package.json')
 const log = require('@czh-cli-dev/log')
 const init = require('@czh-cli-dev/init')
-
+const exec = require('@czh-cli-dev/exec')
 const constant = require('./const')
 
 let args, config
@@ -16,13 +16,7 @@ const program = new commander.Command()
 
 async function core() {
   try {
-    checkPkgVersion()
-    checkNodeVersion()
-    // checkRoot(); //后面恢复 目前他只在mac上有用
-    checkUserHome()
-    // checkInputArgs()
-    checkEnv()
-    await checkGlobalUpdate()
+    prepare()
     registerCommand()
   } catch (e) {
     log.error(e.message)
@@ -36,12 +30,14 @@ function registerCommand() {
     .usage('<command> [options]')
     .version(pkg.version)
     .option('-d, --debug', '是否开启调试模式', false)
+    .option('-tp,--targetPath <targetPath>', '是否指定本地调试文件路径', '')
 
   program
     .command('init [projectName]')
     .option('-f,--force', '是否强制初始化项目')
-    .action(init)
+    .action(exec)
 
+  // 开启debug模式
   program.on('option:debug', () => {
     if (program.opts().debug) {
       process.env.LOG_LEVEL = 'verbose'
@@ -51,6 +47,13 @@ function registerCommand() {
     log.level = process.env.LOG_LEVEL
     log.verbose('test')
   })
+
+  //指定targetPath
+  program.on('option:targetPath', () => {
+    process.env.CLI_TARGET_PATH = program.targetPath
+  })
+
+  // 对未知命令监听
   program.on('command:*', obj => {
     const availableCommands = program.commands.map(cmd => cmd.name())
     console.log(colors.red('未知的命令' + obj[0]))
@@ -63,6 +66,16 @@ function registerCommand() {
     console.log()
   }
   program.parse(process.argv)
+}
+
+async function prepare() {
+  checkPkgVersion()
+  checkNodeVersion()
+  // checkRoot(); //后面恢复 目前他只在mac上有用
+  checkUserHome()
+  // checkInputArgs()
+  checkEnv()
+  await checkGlobalUpdate()
 }
 
 // 检查是否需要全局更新
@@ -112,21 +125,21 @@ function createDefaultConfig() {
 }
 
 // 检查入参是否是debug模式
-function checkInputArgs() {
-  const minimist = require('minimist')
-  args = minimist(process.argv.slice(2))
-  checkArgs()
-}
+// function checkInputArgs() {
+//   const minimist = require('minimist')
+//   args = minimist(process.argv.slice(2))
+//   checkArgs()
+// }
 
 // 检查参数
-function checkArgs() {
-  if (args.debug) {
-    process.env.LOG_LEVEL = 'verbose'
-  } else {
-    process.env.LOG_LEVEL = 'info'
-  }
-  log.level = process.env.LOG_LEVEL
-}
+// function checkArgs() {
+//   if (args.debug) {
+//     process.env.LOG_LEVEL = 'verbose'
+//   } else {
+//     process.env.LOG_LEVEL = 'info'
+//   }
+//   log.level = process.env.LOG_LEVEL
+// }
 
 // 检查是否是root账户启动  注：windows 系统有问题 目前所知只有macOs才生效
 function checkRoot() {
