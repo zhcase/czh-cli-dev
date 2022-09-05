@@ -1,14 +1,18 @@
-"use strict"
+'use strict'
 const path = require('path')
-const semver = require("semver")
-const userHome = require("user-home")
-const pathExists = require("path-exists").sync
-const colors = require("colors/safe")
-const pkg = require("../package.json")
-const log = require("@czh-cli-dev/log")
-const constant = require("./const")
+const semver = require('semver')
+const commander = require('commander')
+const userHome = require('user-home')
+const pathExists = require('path-exists').sync
+const colors = require('colors/safe')
+const pkg = require('../package.json')
+const log = require('@czh-cli-dev/log')
+const init = require('@czh-cli-dev/init')
+
+const constant = require('./const')
 
 let args, config
+const program = new commander.Command()
 
 async function core() {
   try {
@@ -16,14 +20,50 @@ async function core() {
     checkNodeVersion()
     // checkRoot(); //后面恢复 目前他只在mac上有用
     checkUserHome()
-    checkInputArgs()
+    // checkInputArgs()
     checkEnv()
     await checkGlobalUpdate()
+    registerCommand()
   } catch (e) {
     log.error(e.message)
   }
 }
 
+// 注册命令
+function registerCommand() {
+  program
+    .name(Object.keys(pkg.bin)[0])
+    .usage('<command> [options]')
+    .version(pkg.version)
+    .option('-d, --debug', '是否开启调试模式', false)
+
+  program
+    .command('init [projectName]')
+    .option('-f,--force', '是否强制初始化项目')
+    .action(init)
+
+  program.on('option:debug', () => {
+    if (program.opts().debug) {
+      process.env.LOG_LEVEL = 'verbose'
+    } else {
+      process.env.LOG_LEVEL = 'info'
+    }
+    log.level = process.env.LOG_LEVEL
+    log.verbose('test')
+  })
+  program.on('command:*', obj => {
+    const availableCommands = program.commands.map(cmd => cmd.name())
+    console.log(colors.red('未知的命令' + obj[0]))
+    if (availableCommands.length > 0) {
+      console.log(colors.red('可用命令:' + availableCommands.join(',')))
+    }
+  })
+  if (program.args && program.args.length < 1) {
+    program.outputHelp()
+    console.log()
+  }
+  program.parse(process.argv)
+}
 
 // 检查是否需要全局更新
 async function checkGlobalUpdate() {
@@ -31,35 +71,34 @@ async function checkGlobalUpdate() {
   const currentVersion = pkg.version
   const npmName = pkg.name
   // 2.调用Npm Api 获取所有模块
-  const { getNpmSemverVersion } = require("@czh-cli-dev/get-npm-info")
+  const { getNpmSemverVersion } = require('@czh-cli-dev/get-npm-info')
   let lastVersion = await getNpmSemverVersion(currentVersion, npmName)
   if (lastVersion && semver.gt(lastVersion, currentVersion)) {
-    log.warn(colors.yellow(`请手动更新${npmName},当前版本：${currentVersion},最新版本:${lastVersion}
-    更新命令：npm install -g ${npmName}`))
+    log.warn(
+      colors.yellow(`请手动更新${npmName},当前版本：${currentVersion},最新版本:${lastVersion}
+    更新命令：npm install -g ${npmName}`),
+    )
   }
   // 3.提取所有版本号，比对哪些版本号是大于当前版本号的
   // 4. 获取最新版本号，提示用户更新到该版本
-
 }
-
-
 
 // 检查环境变量
 function checkEnv() {
   const dotenv = require('dotenv')
-  let dotenvPath = path.resolve(userHome, ".env")
+  let dotenvPath = path.resolve(userHome, '.env')
   if (pathExists(dotenvPath)) {
     dotenv.config({ path: dotenvPath })
   }
   createDefaultConfig()
 
-  log.verbose("环境变量", process.env.CLI_HOME_PATH)
+  log.verbose('环境变量', process.env.CLI_HOME_PATH)
 }
 
 // 创建默认配置
 function createDefaultConfig() {
   const cliConifg = {
-    home: userHome
+    home: userHome,
   }
   if (process.env.CLI_HOME) {
     cliConifg['cliHome'] = path.join(userHome, process.env.CLI_HOME)
@@ -74,7 +113,7 @@ function createDefaultConfig() {
 
 // 检查入参是否是debug模式
 function checkInputArgs() {
-  const minimist = require("minimist")
+  const minimist = require('minimist')
   args = minimist(process.argv.slice(2))
   checkArgs()
 }
@@ -82,9 +121,9 @@ function checkInputArgs() {
 // 检查参数
 function checkArgs() {
   if (args.debug) {
-    process.env.LOG_LEVEL = "verbose"
+    process.env.LOG_LEVEL = 'verbose'
   } else {
-    process.env.LOG_LEVEL = "info"
+    process.env.LOG_LEVEL = 'info'
   }
   log.level = process.env.LOG_LEVEL
 }
@@ -92,16 +131,15 @@ function checkArgs() {
 // 检查是否是root账户启动  注：windows 系统有问题 目前所知只有macOs才生效
 function checkRoot() {
   // console.log(process.geteuid());
-  const rootCheck = require("root-check")
+  const rootCheck = require('root-check')
   // 切换到root账户
   rootCheck()
 }
 
 //切换到用户主目录 检查用户主目录是否存在
 function checkUserHome() {
-  console.log(userHome)
   if (!userHome || !pathExists(userHome)) {
-    throw new Error(colors.red("当前登录用户主目录不存在!"))
+    throw new Error(colors.red('当前登录用户主目录不存在!'))
   }
 }
 
@@ -113,14 +151,14 @@ function checkNodeVersion() {
   const lowestVersion = constant.LOWEST_NODE_VERSION
   if (!semver.gte(currentVersion, lowestVersion)) {
     throw new Error(
-      colors.red(`czh-cli 需要安装 v${lowestVersion}以上版本的Node.js`)
+      colors.red(`czh-cli 需要安装 v${lowestVersion}以上版本的Node.js`),
     )
   }
 }
 
 // 检查package版本
 function checkPkgVersion() {
-  log.info("cli", pkg.version)
+  log.info('cli', pkg.version)
 }
 
 module.exports = core
