@@ -1,8 +1,8 @@
 {
-  "name": "@czh-cli-dev/exec",
+  "name": "@czh-cli-dev/format-path",
   "version": "1.0.0",
   "description": "> TODO: description",
-  "author": "chenzehua <136565629@qq.com>",
+  "author": "zhcase <ze__hua@163.com>",
   "homepage": "https://github.com/zhcase/czh-cli-dev#readme",
   "license": "ISC",
   "main": "lib/index.js",
@@ -21,12 +21,7 @@
     "url": "git+https://github.com/zhcase/czh-cli-dev.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
-  },
-  "dependencies": {
-    "@czh-cli-dev/package":"file:../../models/package",
-    "@czh-cli-dev/log":"file:../../utils/log"
-
+    "test": "node ./__tests__/@czh-cli-dev/format-path.test.js"
   },
   "bugs": {
     "url": "https://github.com/zhcase/czh-cli-dev/issues"

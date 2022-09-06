@@ -23,6 +23,12 @@
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
+  "dependencies": {
+    "@czh-cli-dev/utils": "file:../../utils/utils",
+    "@czh-cli-dev/format-path": "file:../../utils/format-path",
+
+    "pkg-dir": "^5.0.0"
+  },
   "bugs": {
     "url": "https://github.com/zhcase/czh-cli-dev/issues"
   }
