@@ -44,13 +44,13 @@ function registerCommand() {
     } else {
       process.env.LOG_LEVEL = 'info'
     }
-    log.level = process.env.LOG_LEVEL
+    log.level = process.env.LOG_LEVEL 
     log.verbose('test')
   })
 
   //指定targetPath
-  program.on('option:targetPath', () => {
-    process.env.CLI_TARGET_PATH = program.targetPath
+  program.on('option:targetPath', () => {  
+    process.env.CLI_TARGET_PATH = program.opts().targetPath
   })
 
   // 对未知命令监听
