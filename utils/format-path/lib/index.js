@@ -7,7 +7,7 @@ function formatPath(p) {
     const sep = path.sep
     console.log(sep)
     if (sep === '/') {
-      return sep
+      return p
     } else {
       return p.replace(/\\/g, '/')
     }

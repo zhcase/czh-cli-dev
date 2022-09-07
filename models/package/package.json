@@ -26,7 +26,8 @@
   "dependencies": {
     "@czh-cli-dev/format-path": "file:../../utils/format-path",
     "@czh-cli-dev/utils": "file:../../utils/utils",
-    "npminstall": "^6.5.1",
+    "@czh-cli-dev/get-npm-info": "file:../../utils/get-npm-info",
+    "npminstall": "^5.5.1",
     "path-exists": "^4.0.0",
     "pkg-dir": "^5.0.0"
   },
