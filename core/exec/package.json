@@ -24,9 +24,8 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@czh-cli-dev/package":"file:../../models/package",
-    "@czh-cli-dev/log":"file:../../utils/log"
-
+    "@czh-cli-dev/package": "file:../../models/package",
+    "@czh-cli-dev/log": "file:../../utils/log"
   },
   "bugs": {
     "url": "https://github.com/zhcase/czh-cli-dev/issues"

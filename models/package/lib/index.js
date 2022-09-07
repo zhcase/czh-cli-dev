@@ -2,6 +2,7 @@
 
 const path = require('path')
 const pkgDir = require('pkg-dir').sync
+const pathExists =require("path-exists").sync;
 const { isObject } = require('@czh-cli-dev/utils')
 const formatPath = require('@czh-cli-dev/format-path')
 class Package {
@@ -25,7 +26,13 @@ class Package {
   }
 
   // 判断当前package是否存在
-  exists() {}
+  exists() {
+    if(this.storeDir){
+
+    }else{
+      return pathExists(this.targetPath)
+    }
+  }
   // 安装package
   install() {}
   //更新package

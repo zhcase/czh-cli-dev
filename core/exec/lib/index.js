@@ -1,7 +1,6 @@
 'use strict'
 
 module.exports = exec
-
 const Package = require('@czh-cli-dev/package')
 const log = require('@czh-cli-dev/log')
 
@@ -13,7 +12,6 @@ function exec() {
   const homePath = process.env.CLI_HOME_PATH
   log.verbose('targetPath', targetPath)
   log.verbose('homePath', homePath)
-
   const comdObj = arguments[arguments.length - 1]
   const cmdName = comdObj.name()
   const packageName = SETTINGS[cmdName]
@@ -28,7 +26,10 @@ function exec() {
     packageName,
     packageVersion,
   })
-  console.log(pkg.getRootFilePath())
-
+  console.log(pkg.exists())
+  const rootFile=pkg.getRootFilePath();
+  if(rootFile){
+    require(rootFile).apply(null,arguments)
+  }
   // TODO
 }
