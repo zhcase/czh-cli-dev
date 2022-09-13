@@ -30,7 +30,6 @@ class Package {
     // package的version
     this.packageVersion = options.packageVersion
     //package的缓存目录前缀
-
     this.cacheFilePathPrefix = this.packageName.replace('/', '_')
   }
 
@@ -55,7 +54,6 @@ class Package {
     console.log('this.storeDir', this.storeDir)
     if (this.storeDir) {
       await this.prepare()
-      console.log(this.cacheFilePath)
       return pathExists(this.cacheFilePath)
     } else {
       return pathExists(this.targetPath)
@@ -82,14 +80,14 @@ class Package {
   getRootFilePath() {
     //1. 获取package.json 的所在目录 - pkg-dir
     const dir = pkgDir(this.targetPath)
-    console.log(dir)
+    console.log("dir",dir)
     if (dir) {
       //2. 读取package.json - require() js/json/node
       const pkgFile = require(path.resolve(dir, 'package.json'))
-      console.log('pkgFile', pkgFile)
       //3.寻找 main/lib -path
       if (pkgFile && (pkgFile.main || pkgFile.lib)) {
         //4.路径的兼容(macos/windows)
+        console.log('formatPath', formatPath(path.resolve(dir, pkgFile.main)));
         return formatPath(path.resolve(dir, pkgFile.main))
       }
     }

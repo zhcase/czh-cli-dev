@@ -74,7 +74,7 @@ function registerCommand() {
 async function prepare() {
   checkPkgVersion()
   checkNodeVersion()
-  // checkRoot(); //后面恢复 目前他只在mac上有用
+  checkRoot(); //后面恢复 目前他只在mac上有用
   checkUserHome()
   // checkInputArgs()
   checkEnv()
@@ -88,15 +88,15 @@ async function checkGlobalUpdate() {
   const npmName = pkg.name
   // 2.调用Npm Api 获取所有模块
   const { getNpmSemverVersion } = require('@czh-cli-dev/get-npm-info')
+  // 3.提取所有版本号，比对哪些版本号是大于当前版本号的
   let lastVersion = await getNpmSemverVersion(currentVersion, npmName)
+  // 4. 获取最新版本号，提示用户更新到该版本
   if (lastVersion && semver.gt(lastVersion, currentVersion)) {
     log.warn(
       colors.yellow(`请手动更新${npmName},当前版本：${currentVersion},最新版本:${lastVersion}
     更新命令：npm install -g ${npmName}`),
     )
   }
-  // 3.提取所有版本号，比对哪些版本号是大于当前版本号的
-  // 4. 获取最新版本号，提示用户更新到该版本
 }
 
 // 检查环境变量
