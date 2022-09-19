@@ -25,5 +25,8 @@
   },
   "bugs": {
     "url": "https://github.com/zhcase/czh-cli-dev/issues"
+  },
+  "dependencies": {
+    "@czh-cli-dev/command":"file:../../models/command"
   }
 }

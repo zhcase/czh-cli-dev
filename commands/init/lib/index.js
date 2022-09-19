@@ -1,7 +1,16 @@
 'use strict'
+const Command=require("@czh-cli-dev/command");
 
-function init(projectName, cmdObj) {
-  console.log('init', projectName, cmdObj.force,cmdObj.parent.targetPath)
+class InitCommand extends Command{
+
 }
 
-module.exports = init
+function init(argv){
+  console.log(12);
+  console.log(argv);
+   return  new InitCommand(argv);
+}
+
+module.exports.InitCommand = InitCommand
+
+module.exports=init
