@@ -62,7 +62,6 @@ class Package {
 
   // 判断当前package是否存在
   async exists() {
-    console.log('this.storeDir', this.storeDir)
     if (this.storeDir) {
       await this.prepare()
       return pathExists(this.cacheFilePath)
@@ -92,7 +91,6 @@ class Package {
     const latestPackageVersion = await getNpmLatestVersion(this.packageName)
     // 2. 查询最新版本号对应的路径是否存在
     const latestFilePath = this.getSpecifiCacheFilePath(latestPackageVersion)
-    console.log('latestFilePath', latestFilePath)
     // 3.如果不存在，则直接安装最新版本
     if (!pathExists(latestFilePath)) {
       return npminstall({
@@ -119,7 +117,6 @@ class Package {
         //3.寻找 main/lib -path
         if (pkgFile && (pkgFile.main || pkgFile.lib)) {
           //4.路径的兼容(macos/windows)
-          console.log('formatPath', formatPath(path.resolve(dir, pkgFile.main)))
           return formatPath(path.resolve(dir, pkgFile.main))
         }
       }

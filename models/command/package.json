@@ -1,8 +1,8 @@
 {
-  "name": "@czh-cli-dev/init",
+  "name": "@czh-cli-dev/command",
   "version": "1.0.0",
   "description": "> TODO: description",
-  "author": "zhcase <ze__hua@163.com>",
+  "author": "chenzehua <136565629@qq.com>",
   "homepage": "https://github.com/zhcase/czh-cli-dev#readme",
   "license": "ISC",
   "main": "lib/index.js",
@@ -21,13 +21,16 @@
     "url": "git+https://github.com/zhcase/czh-cli-dev.git"
   },
   "scripts": {
-    "test": "node ./__tests__/@czh-cli-dev/init.test.js"
+    "test": "node ./__tests__/@czh-cli-dev/Command.test.js"
   },
   "bugs": {
     "url": "https://github.com/zhcase/czh-cli-dev/issues"
   },
   "dependencies": {
-    "@czh-cli-dev/command":"file:../../models/command",
-    "@czh-cli-dev/log":"file:../../utils/log"
+    "colors": "^1.4.0",
+    "semver": "^7.3.7",
+    "@czh-cli-dev/log":"file:../../utils/log",
+    "@czh-cli-dev/utils":"file:../../utils/utils"
+
   }
 }
