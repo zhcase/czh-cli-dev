@@ -1,5 +1,5 @@
 {
-  "name": "@czh-cli-dev/init",
+  "name": "@czh-cli-dev/request",
   "version": "1.0.0",
   "description": "> TODO: description",
   "author": "zhcase <ze__hua@163.com>",
@@ -21,17 +21,12 @@
     "url": "git+https://github.com/zhcase/czh-cli-dev.git"
   },
   "scripts": {
-    "test": "node ./__tests__/@czh-cli-dev/init.test.js"
+    "test": "node ./__tests__/@czh-cli-dev/request.test.js"
   },
   "bugs": {
     "url": "https://github.com/zhcase/czh-cli-dev/issues"
   },
   "dependencies": {
-    "@czh-cli-dev/command": "file:../../models/command",
-    "@czh-cli-dev/log": "file:../../utils/log",
-    "@czh-cli-dev/request": "file:../../utils/request",
-    "fs-extra": "^10.1.0",
-    "inquirer": "^7.3.3",
-    "semver": "^7.3.7"
+    "axios": "^1.1.2"
   }
 }

@@ -5,6 +5,7 @@ const inquirer = require('inquirer')
 const semver =require("semver")
 const Command = require('@czh-cli-dev/command')
 const log = require('@czh-cli-dev/log')
+const getProjectTemplate=require("./getProjectTemplate")
 
 
 const TYPE_PROJECT='project';
@@ -23,6 +24,7 @@ class InitCommand extends Command {
      const projectInfo= await this.prepare()
      if(projectInfo){
       //2.下载模板
+      this.projectInfo=projectInfo;
       this.downLoadTemplate();
      }
     } catch (error) {
@@ -32,6 +34,7 @@ class InitCommand extends Command {
     // 3. 安装模板
   }
   downLoadTemplate(){
+    console.log(this.projectInfo);
     //1.通过项目模板api获取项目模板信息
     //1.1 通过egg.js 搭建一套后端系统
     //1.2 通过npm 存储项目
@@ -41,6 +44,13 @@ class InitCommand extends Command {
 
   async prepare() {
     const localPath = process.cwd()
+    //判断项目模板是否存在
+    // const template=[];
+    // if(!template||template.length===0){
+    //   throw new Error("项目模板不存在")
+    // }
+    // this.template=template;
+
     //1. 判断当前目录为空
     console.log(!this.isDirEmpty(localPath))
     if (!this.isDirEmpty(localPath)) {
@@ -79,7 +89,7 @@ class InitCommand extends Command {
         }
       }
     }
-    
+
     return this.getProjectInfo();
 
     //3.获取项目的基本信息
@@ -124,7 +134,7 @@ class InitCommand extends Command {
             // Pass the return value in the done callback
             done(null, true);
           }, 0);
-        
+
         },
         filter:(v)=>{
           return v
