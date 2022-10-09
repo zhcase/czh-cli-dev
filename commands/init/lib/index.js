@@ -4,6 +4,7 @@ const fse = require('fs-extra')
 const inquirer = require('inquirer')
 const semver =require("semver")
 const Command = require('@czh-cli-dev/command')
+const Package=require("@czh-cli-dev/package");
 const log = require('@czh-cli-dev/log')
 const getProjectTemplate=require("./getProjectTemplate")
 
@@ -34,12 +35,16 @@ class InitCommand extends Command {
     // 3. 安装模板
   }
   downLoadTemplate(){
+    console.log(process.env);
     console.log(this.projectInfo);
     //1.通过项目模板api获取项目模板信息
     //1.1 通过egg.js 搭建一套后端系统
     //1.2 通过npm 存储项目
     //1.3 讲项目模板信息存储到mongodb数据库中
     //1.4 通过egg.js 获取mongodb中的数据并且通过APi返回
+    const { projectTemplate }=this.projectInfo;
+    const templateInfo=this.template.find(item=>item.npmName===projectTemplate)
+    console.log(templateInfo);
   }
 
   async prepare() {
@@ -50,7 +55,11 @@ class InitCommand extends Command {
     //   throw new Error("项目模板不存在")
     // }
     // this.template=template;
-
+    this.template= [{
+      name:"vue2标准模板",
+      npmName:"czh-cli-dev-template-vue2",
+      version:"1.0.0"
+    }]
     //1. 判断当前目录为空
     console.log(!this.isDirEmpty(localPath))
     if (!this.isDirEmpty(localPath)) {
@@ -97,6 +106,8 @@ class InitCommand extends Command {
   }
 
  async getProjectInfo(){
+  console.log(process.env);
+
      let projectInfo={};
      //1.选择创建项目或者组件
      const { type }=await inquirer.prompt({
@@ -166,7 +177,14 @@ class InitCommand extends Command {
             return v
           }
         }
-      }])
+      },{
+        type:"list",
+        name:"projectTemplate",
+        message:"请选择项目模板",
+        choices:this.createTemplateChoice()
+      }
+
+    ])
      projectInfo={
       type,
       ...o
@@ -187,7 +205,19 @@ class InitCommand extends Command {
     console.log(fileList)
     return !fileList || fileList.length <= 0
   }
+  createTemplateChoice(){
+
+
+    // 先写死后面要用动态方法
+    // return this.template.map(item=>({
+    return this.template.map(item=>({
+      value:item.npmName,
+      name:item.name
+    }))
+  }
 }
+
+
 
 function init(argv) {
   return new InitCommand(argv)
